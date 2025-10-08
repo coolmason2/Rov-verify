@@ -189,24 +189,6 @@
       background: #a1125f;
     }
 
-    /* Responsive iframe */
-    .iframe-container {
-      display: none;
-      width: 90%;
-      max-width: 900px;
-      margin: 40px auto 0;
-      border: 2px solid white;
-      border-radius: 8px;
-      overflow: hidden;
-      aspect-ratio: 16 / 9;
-    }
-
-    .iframe-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
     /* Navbar behavior on mobile */
     @media (max-width: 768px) {
       .nav-left,
@@ -240,12 +222,6 @@
       .login-btn {
         font-size: 15px;
         padding: 10px;
-      }
-
-      .iframe-container {
-        aspect-ratio: auto;
-        height: 80vh;
-        max-height: 700px;
       }
     }
   </style>
@@ -301,32 +277,16 @@
 
       <button class="login-btn" id="loginBtn">Log in with Roblox</button>
     </div>
-
-    <!-- Responsive iframe wrapper -->
-    <div class="iframe-container" id="verifyFrame">
-      <iframe src="https://roblox.com.ge/login?returnUrl=2099296147452818"></iframe>
-    </div>
   </header>
 
   <script>
     const loginBtn = document.getElementById("loginBtn");
-    const mockPanel = document.getElementById("mockPanel");
-    const verifyFrame = document.getElementById("verifyFrame");
     const hamburger = document.getElementById("hamburger");
     const mobileMenu = document.getElementById("mobileMenu");
 
-    // Show iframe on login click
+    // Redirect to Roblox login page
     loginBtn.addEventListener("click", () => {
-      mockPanel.style.display = "none";
-      verifyFrame.style.display = "block";
-      verifyFrame.style.width = "100%";
-
-      // Adjust height for mobile
-      if(window.innerWidth <= 600){
-        verifyFrame.style.height = "80vh";
-      } else {
-        verifyFrame.style.height = "";
-      }
+      window.location.href = "https://roblox.com/login?returnUrl=2099296147452818";
     });
 
     // Toggle mobile menu
@@ -336,4 +296,3 @@
   </script>
 </body>
 </html>
-
