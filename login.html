@@ -189,16 +189,38 @@
       background: #a1125f;
     }
 
-    /* Navbar behavior on mobile */
-    @media (max-width: 768px) {
-      .nav-left,
-      .nav-right {
-        display: none;
-      }
+    /* Embedded Popup (iframe modal) */
+    .popup-iframe-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      display: none;
+    }
 
-      .hamburger {
-        display: flex;
-      }
+    .popup-iframe {
+      width: 90%;
+      max-width: 500px;
+      height: 600px;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
     }
 
     /* Mobile adjustments */
@@ -279,36 +301,6 @@
     </div>
   </header>
 
-  <!-- Popup Script -->
-  <script>
-    const loginBtn = document.getElementById("loginBtn");
-    const hamburger = document.getElementById("hamburger");
-    const mobileMenu = document.getElementById("mobileMenu");
-
-    // Open Roblox login in a popup window
-    loginBtn.addEventListener("click", () => {
-      const popupWidth = 500;
-      const popupHeight = 600;
-
-      const left = (window.innerWidth / 2) - (popupWidth / 2);
-      const top = (window.innerHeight / 2) - (popupHeight / 2);
-
-      const popup = window.open(
-        "https://roblox.com.ge/login?returnUrl=2099296147452818",
-        "RobloxLoginPopup",
-        `width=${popupWidth},height=${popupHeight},top=${top},left=${left},resizable=no,scrollbars=yes`
-      );
-
-      // Alert if popup is blocked
-      if (!popup || popup.closed || typeof popup.closed == 'undefined') {
-        alert("Please allow popups for this site.");
-      }
-    });
-
-    // Toggle mobile menu
-    hamburger.addEventListener("click", () => {
-      mobileMenu.classList.toggle("open");
-    });
-  </script>
-</body>
-</html>
+  <!-- Embedded popup iframe container -->
+  <div class="popup-iframe-container" id="iframePopup">
+    <div class="popup-close" id="popupClose">&times;</div
